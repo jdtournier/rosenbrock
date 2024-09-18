@@ -60,11 +60,11 @@ int main (int argc, char ** argv)
 {
   const std::vector<std::string> args (argv, argv+argc);
 
-  if (args.size() <= 2)
-    throw std::runtime_error ("expected two arguments: values for a & b in Rosenbrock function");
-
-  double a = std::stod (args[1]);
-  double b = std::stod (args[2]);
+  double a = 1.0, b = 100.0;
+  if (args.size() > 2) {
+    a = std::stod (args[1]);
+    b = std::stod (args[2]);
+  }
 
   TG::Image<float> canvas (256, 256);
   const double xmin = -2.0, xmax = 2.0;
