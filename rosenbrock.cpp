@@ -1,5 +1,5 @@
 #include <iostream>
-#include <terminal_graphics.h>
+#include <termviz.h>
 
 
 template <typename ValueType>
@@ -14,20 +14,20 @@ inline double Rosenbrock (double x, double y, const double a, const double b)
 template <class ImageType>
 class Overlay {
   public:
-    Overlay (const ImageType& main, double min, double max, TG::ColourMap cmap = TG::gray()) :
+    Overlay (const ImageType& main, double min, double max, termviz::ColourMap cmap = termviz::gray()) :
       overlay (main.width(), main.height()),
       pix (main, min, max, cmap.size()),
       cmap (cmap) { }
 
     int width () const { return pix.width(); }
     int height () const { return pix.height(); }
-    TG::ctype operator() (int x, int y) const {
+    termviz::ctype operator() (int x, int y) const {
       return overlay(x,y) ? overlay (x,y) : pix (x,y);
     }
 
 
-    TG::ctype add_colours (const TG::ColourMap& colours) {
-      TG::ctype first = cmap.size();
+    termviz::ctype add_colours (const termviz::ColourMap& colours) {
+      termviz::ctype first = cmap.size();
       cmap.insert (cmap.end(), colours.begin(), colours.end());
       return first;
     }
@@ -41,13 +41,13 @@ class Overlay {
             overlay(x,y) = colour_index;
     }
 
-    const TG::ColourMap& colourmap () const { return cmap; }
+    const termviz::ColourMap& colourmap () const { return cmap; }
 
-    TG::Image<TG::ctype> overlay;
+    termviz::Image<termviz::ctype> overlay;
 
   private:
-    TG::Rescale<ImageType> pix;
-    TG::ColourMap cmap;
+    termviz::Rescale<ImageType> pix;
+    termviz::ColourMap cmap;
 };
 
 
@@ -66,7 +66,7 @@ int main (int argc, char ** argv)
     b = std::stod (args[2]);
   }
 
-  TG::Image<float> canvas (256, 256);
+  termviz::Image<float> canvas (256, 256);
   const double xmin = -2.0, xmax = 2.0;
   const double ymin = -2.0, ymax = 2.0;
 
@@ -86,7 +86,7 @@ int main (int argc, char ** argv)
   overlay.dot (150, 100, 2, red);
 
   std::cout << std::format ("plot of Rosenbrock function with parameters a = {}, b = {}:\n", a, b);
-  TG::imshow (overlay, overlay.colourmap());
+  termviz::imshow (overlay, overlay.colourmap());
 
   return 0;
 }
